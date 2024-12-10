@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/TestWorker.dir/tests/TestWorker.cc.o -o TestWorker 
