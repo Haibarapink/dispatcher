@@ -1,1 +1,3 @@
-/usr/bin/c++ -g CMakeFiles/TestWorker.dir/tests/TestWorker.cc.o -o TestWorker 
+"C:\Program Files\JetBrains\CLion 2024.3\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\TestWorker.dir/objects.a
+C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\ar.exe qc CMakeFiles\TestWorker.dir/objects.a @CMakeFiles\TestWorker.dir\objects1.rsp
+C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\TestWorker.dir/objects.a -Wl,--no-whole-archive -o TestWorker.exe -Wl,--out-implib,libTestWorker.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\TestWorker.dir\linkLibs.rsp

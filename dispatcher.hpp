@@ -54,33 +54,32 @@ public:
     void Run();
 };
 
-/// TODO
-//class DispatcherOnce {
-//    std::vector<Chunk> chunks;
-//    std::vector<std::shared_ptr<Worker>> workers;
-//    bool quit = false;
-//public:
-//    DispatcherOnce() {
-//        /// 1024 * 4096 * 100 = 400MB
-//        chunks = std::vector<Chunk>(chunk_num);
-//        for (auto &&i : chunks) {
-//            for (int j = 0; j < 4096; j++) {
-//                i.data[j] = 'a' + rand() % 26;
-//            }
-//        }
-//    }
-//
-//    void D(std::shared_ptr<Worker> w);
-//    void AppendWorker(std::shared_ptr<Worker> w) {
-//        workers.emplace_back(std::move(w));
-//    }
-//
-//    inline bool empty() const {
-//        return chunks.empty();
-//    }
-//
-//    void Run();
-//};
+class DispatcherOnce {
+    std::vector<Chunk> chunks;
+    std::vector<std::shared_ptr<Worker>> workers;
+    bool quit = false;
+public:
+    DispatcherOnce() {
+        /// 1024 * 4096 * 100 = 400MB
+        chunks = std::vector<Chunk>(chunk_num);
+        for (auto &&i : chunks) {
+            for (int j = 0; j < 4096; j++) {
+                i.data[j] = 'a' + rand() % 26;
+            }
+        }
+    }
+
+    void D(std::shared_ptr<Worker> w);
+    void AppendWorker(std::shared_ptr<Worker> w) {
+        workers.emplace_back(std::move(w));
+    }
+
+    inline bool empty() const {
+        return chunks.empty();
+    }
+
+    void Run();
+};
 
 class WorkState {
 public:

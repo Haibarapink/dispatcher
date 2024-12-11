@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.22"
@@ -41,14 +41,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "TestWorker::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-TestWorker-Debug-58d9f6a2473fbf467ea7.json",
+					"jsonFile" : "target-TestWorker-Debug-f791b6c01d3a6412efe6.json",
 					"name" : "TestWorker",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "dasex_pipeline_dispatcher::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-dasex_pipeline_dispatcher-Debug-71dadb39a36a8dc12ef9.json",
+					"jsonFile" : "target-dasex_pipeline_dispatcher-Debug-95b3f9375a099a392ce4.json",
 					"name" : "dasex_pipeline_dispatcher",
 					"projectIndex" : 0
 				}
@@ -58,12 +58,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/tmp/tmp.VCoEUiMimF/cmake-build-debug",
-		"source" : "/tmp/tmp.VCoEUiMimF"
+		"build" : "C:/Users/ZhuanZ/CLionProjects/dispatcher/cmake-build-debug",
+		"source" : "C:/Users/ZhuanZ/CLionProjects/dispatcher"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 3
+		"minor" : 7
 	}
 }

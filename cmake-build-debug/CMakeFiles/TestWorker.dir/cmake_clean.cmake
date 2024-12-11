@@ -1,8 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/TestWorker.dir/tests/TestWorker.cc.o"
-  "CMakeFiles/TestWorker.dir/tests/TestWorker.cc.o.d"
-  "TestWorker"
+  "CMakeFiles/TestWorker.dir/tests/TestWorker.cc.obj"
+  "CMakeFiles/TestWorker.dir/tests/TestWorker.cc.obj.d"
+  "TestWorker.exe"
+  "TestWorker.exe.manifest"
   "TestWorker.pdb"
+  "libTestWorker.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
