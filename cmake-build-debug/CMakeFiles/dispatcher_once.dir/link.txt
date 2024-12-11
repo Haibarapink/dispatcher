@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/dispatcher_once.dir/tests/TestDispatcherOnce.cc.o -o dispatcher_once 

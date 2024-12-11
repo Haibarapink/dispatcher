@@ -35,21 +35,18 @@ void DispatchWork() {
     for (int i = 0; i < 10; i++) {
         contexts.emplace_back();
         contexts.back().id = i;
+        contexts.back().worker->id = i;
     }
 
     for (auto &context: contexts) {
         dispatcher.AppendWorker(context.worker);
     }
 
-//    std::thread worker_thread([&contexts](){
-//        for (auto& context : contexts) {
-//            context.worker->Run();
-//        }
-//    });
     std::vector<std::thread> threads;
 
     for (auto i = 0; i < 10; ++i) {
-        threads.emplace_back([&contexts, i]() {
+        threads.emplace_back([&contexts, i, &dispatcher]() {
+            contexts[i].worker->dispatcher_ref = &dispatcher;
             contexts[i].worker->Run();
         });
     }
@@ -58,7 +55,6 @@ void DispatchWork() {
         dispatcher.Run();
     });
 
-//    worker_thread.join();
     for (auto &thread: threads) {
         thread.join();
     }

@@ -41,11 +41,7 @@ void DispatchWork() {
         dispatcher.AppendWorker(context.worker);
     }
 
-//    std::thread worker_thread([&contexts](){
-//        for (auto& context : contexts) {
-//            context.worker->Run();
-//        }
-//    });
+
     std::vector<std::thread> threads;
 
     for (auto i = 0; i < 10; ++i) {

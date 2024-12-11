@@ -82,6 +82,7 @@ public:
 
 class Worker {
     friend class DispatcherOnce;
+
     std::mutex mtx;
     std::queue<Chunk> q;
     std::function<void(Chunk, std::shared_ptr<WorkState> &state)> callback;
@@ -89,43 +90,40 @@ class Worker {
     std::condition_variable condition;
     bool quit = false;
 public:
-    DispatcherOnce* dispatcher_ref = nullptr;
+    DispatcherOnce *dispatcher_ref = nullptr;
+    int id;
 public:
     explicit Worker(std::function<void(Chunk, std::shared_ptr<WorkState> &state)> cb, std::shared_ptr<WorkState> s)
             : callback(std::move(cb)), state(std::move(s)) {}
 
     void Run() {
         for (;;) {
+            bool should_steal = false;
             Chunk chunk;
             {
                 std::unique_lock<std::mutex> lock{this->mtx};
+                std::cout << "starting running " << this->id << std::endl;
                 this->condition.wait(lock, [this] { return !this->q.empty() || this->quit; });
-                if (this->quit && this->q.empty()) {
-                    return;
-                }
                 chunk = this->q.front();
                 this->q.pop();
-                if (q.empty()) {
-                    assert(dispatcher_ref != nullptr);
+                if (this->q.empty()) {
+                    should_steal = true;
                 }
             }
             callback(chunk, state);
+            if (should_steal) {
+                if (dispatcher_ref != nullptr) {
+                    std::cout << "wake up " << this->id << std::endl;
+                    std::unique_lock<std::mutex> lock{dispatcher_ref->queue_mtx};
+                    dispatcher_ref->idle_workers.push(this->id);
+                    dispatcher_ref->finished_worker_count++;
+                    dispatcher_ref->condition.notify_all();
+                }
+                return;
+            }
         }
     }
 };
-
-//inline void DispatcherOnce::D(std::shared_ptr<Worker> w) {
-//    if (chunks.empty()) {
-//        return;
-//    }
-//    {
-//        std::unique_lock<std::mutex> lock{w->mtx};
-//        w->q.push(chunks.front());
-//        chunks.pop_front();
-//    }
-//
-//    w->condition.notify_all();
-//}
 
 inline void DispatcherOnce::D() {
     for (auto i = 0; i < workers.size(); ++i) {
@@ -144,52 +142,23 @@ inline void DispatcherOnce::D() {
 }
 
 inline void DispatcherOnce::Run() {
-    /// 负责分发数据
-//    while (!quit) {
-//        for (auto &&w : workers) {
-//            D(w);
-//            if (chunks.empty()) {
-//                break;
-//            }
-//        }
-//        if (chunks.empty()) {
-//            for (auto &&w : workers) {
-//                w->quit = true;
-//                w->condition.notify_all();
-//            }
-//            quit = true;
-//            break;
-//        }
-//    }
+
     CalculateSplitNum();
     D();
     for (auto &&w: workers) {
         w->quit = false;
         w->condition.notify_all();
     }
-
-    /// 接受steal数据请求
-    for (;;) {
-        int idle = -1;
-        {
-            std::unique_lock<std::mutex> lock{this->mtx};
-            this->condition.wait(lock, [this] { return !this->idle_workers.empty() || this->quit; });
-            if (this->quit) {
-                return;
-            }
-            idle = this->idle_workers.front();
-            this->idle_workers.pop();
-            /// TODO steal
-            std::cout << "idle " << idle << std::endl;
-            steal_worker++;
-            if (steal_worker == workers.size()) {
-                quit = true;
-                for (auto &&w : workers) {
-                    w->quit = true;
-                    w->condition.notify_all();
-                }
-                return;
-            }
+    while (true) {
+        std::unique_lock<std::mutex> lock{this->mtx};
+        std::cout << this->finished_worker_count << " " << workers.size() << std::endl;
+        this->condition.wait(lock, [this] { return this->finished_worker_count == workers.size(); });
+        auto front = idle_workers.front();
+        idle_workers.pop();
+        std::cout << "release " << front << std::endl;
+        if (this->finished_worker_count == workers.size()) {
+            std::cout << "all worker finished" << std::endl;
+            return;
         }
     }
 
